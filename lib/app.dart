@@ -1,3 +1,5 @@
+import 'package:dashboard_breeds/di/dependency_injector.dart';
+import 'package:dashboard_breeds/pages/dashboard_breeds_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardBreedsApp extends StatelessWidget {
@@ -5,6 +7,10 @@ class DashboardBreedsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp();
+    return const DependencyInjector(
+      child: MaterialApp(
+        home: DashboardBreedsPage(),
+      ),
+    );
   }
 }
