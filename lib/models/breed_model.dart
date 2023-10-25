@@ -1,15 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 class BreedModel extends Equatable {
-  final String message;
-  final String status;
+  final String breed;
+  final List<String> subBreeds;
 
-  const BreedModel({required this.message, required this.status});
+  const BreedModel({required this.breed, required this.subBreeds});
 
-  factory BreedModel.fromJson(Map<String, dynamic> data) {
-    return BreedModel(message: data["message"], status: data["status"]);
+  factory BreedModel.fromMap(String key, dynamic value) {
+    return BreedModel(breed: key, subBreeds: List.from(value));
   }
 
   @override
-  List<Object?> get props => [message, status];
+  List<Object?> get props => [breed, subBreeds];
 }

@@ -1,27 +1,35 @@
 import 'dart:convert';
 
 import 'package:dashboard_breeds/errors/network_error.dart';
+import 'package:dashboard_breeds/models/dog_image_model.dart';
+import 'package:dashboard_breeds/models/dog_images_model.dart';
 import 'package:dashboard_breeds/models/breed_model.dart';
-import 'package:dashboard_breeds/models/breeds_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class BreedsApiService {
-  Future<BreedsModel> getSubBreedList(String breed, String subBreed) async {
-    final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
-    final response =
-        await http.post(Uri.parse("$baseUrl/$breed/$subBreed/list"));
+  Future<List<BreedModel>> getBreedList() async {
+    final baseUrl = dotenv.env['BREEDS_LIST_BASE_URL'].toString();
+    final response = await http.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
 
-      return BreedsModel.fromJson(jsonBody);
+      if (jsonBody["status"] == "success") {
+        List<BreedModel> breeds = [];
+        (jsonBody["message"] as Map<String, dynamic>).forEach(
+            (key, value) => breeds.add(BreedModel.fromMap(key, value)));
+
+        return breeds;
+      } else {
+        throw NetworkError(jsonBody["status"], jsonBody["message"]);
+      }
     } else {
       throw NetworkError(response.statusCode, response.reasonPhrase);
     }
   }
 
-  Future<BreedModel> getRandomBreedImage(String breed) async {
+  Future<DogImageModel> getRandomBreedImage(String breed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response =
         await http.post(Uri.parse("$baseUrl/$breed/images/random"));
@@ -29,26 +37,26 @@ class BreedsApiService {
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
 
-      return BreedModel.fromJson(jsonBody);
+      return DogImageModel.fromJson(jsonBody);
     } else {
       throw NetworkError(response.statusCode, response.reasonPhrase);
     }
   }
 
-  Future<BreedsModel> getBreedsImagesList(String breed) async {
+  Future<DogImagesModel> getBreedImagesList(String breed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response = await http.post(Uri.parse("$baseUrl/$breed/images"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
 
-      return BreedsModel.fromJson(jsonBody);
+      return DogImagesModel.fromJson(jsonBody);
     } else {
       throw NetworkError(response.statusCode, response.reasonPhrase);
     }
   }
 
-  Future<BreedModel> getRandomSubBreedImage(
+  Future<DogImageModel> getRandomSubBreedImage(
       String breed, String subBreed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response =
@@ -57,13 +65,13 @@ class BreedsApiService {
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
 
-      return BreedModel.fromJson(jsonBody);
+      return DogImageModel.fromJson(jsonBody);
     } else {
       throw NetworkError(response.statusCode, response.reasonPhrase);
     }
   }
 
-  Future<BreedsModel> getSubBreedsImagesList(
+  Future<DogImagesModel> getSubBreedImagesList(
       String breed, String subBreed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response =
@@ -72,7 +80,7 @@ class BreedsApiService {
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
 
-      return BreedsModel.fromJson(jsonBody);
+      return DogImagesModel.fromJson(jsonBody);
     } else {
       throw NetworkError(response.statusCode, response.reasonPhrase);
     }
