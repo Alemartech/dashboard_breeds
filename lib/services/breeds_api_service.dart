@@ -31,8 +31,7 @@ class BreedsApiService {
 
   Future<DogImageModel> getRandomBreedImage(String breed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
-    final response =
-        await http.post(Uri.parse("$baseUrl/$breed/images/random"));
+    final response = await http.get(Uri.parse("$baseUrl/$breed/images/random"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
@@ -45,7 +44,7 @@ class BreedsApiService {
 
   Future<DogImagesModel> getBreedImagesList(String breed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
-    final response = await http.post(Uri.parse("$baseUrl/$breed/images"));
+    final response = await http.get(Uri.parse("$baseUrl/$breed/images"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
@@ -60,7 +59,7 @@ class BreedsApiService {
       String breed, String subBreed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response =
-        await http.post(Uri.parse("$baseUrl/$breed/$subBreed/images/random"));
+        await http.get(Uri.parse("$baseUrl/$breed/$subBreed/images/random"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
@@ -75,7 +74,7 @@ class BreedsApiService {
       String breed, String subBreed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response =
-        await http.post(Uri.parse("$baseUrl/$breed/$subBreed/images"));
+        await http.get(Uri.parse("$baseUrl/$breed/$subBreed/images"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);

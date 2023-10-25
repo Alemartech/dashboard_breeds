@@ -9,6 +9,7 @@ class DashboardBreedsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const DependencyInjector(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: DashboardBreedsPage(),
       ),
     );

@@ -7,7 +7,8 @@ class DogImagesModel extends Equatable {
   const DogImagesModel({required this.message, required this.status});
 
   factory DogImagesModel.fromJson(Map<String, dynamic> data) {
-    return DogImagesModel(message: data["message"], status: data["status"]);
+    return DogImagesModel(
+        message: List.from(data["message"]), status: data["status"]);
   }
 
   @override

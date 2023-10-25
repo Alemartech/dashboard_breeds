@@ -6,4 +6,9 @@ final List<BlocProvider> _blocs = [
       breedsRepository: context.read<BreedsRepository>(),
     )..getBreedsSubbreedsList(),
   ),
+  BlocProvider<DogsImagesBloc>(
+    create: (context) => DogsImagesBloc(
+      breedsRepository: context.read<BreedsRepository>(),
+    ),
+  ),
 ];
