@@ -1,6 +1,8 @@
 import 'package:dashboard_breeds/blocs/dogs_images/dogs_images_bloc.dart';
 import 'package:dashboard_breeds/components/button.dart';
+import 'package:dashboard_breeds/components/dropdown.dart';
 import 'package:dashboard_breeds/models/breed_model.dart';
+import 'package:dashboard_breeds/theme/colors_references.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,41 +40,57 @@ class _SearchBreedsState extends State<SearchBreeds> {
     }
   }
 
+  void _onChangeBreedsDropdown(String? value) {
+    setState(() {
+      if (value != dropdownBreedValue) dropdownSubBreedValue = null;
+      dropdownBreedValue = value?.toString();
+    });
+  }
+
+  void _onChangeSubBreedsDropdown(String? value) {
+    setState(() {
+      dropdownSubBreedValue = value?.toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
-      //  height: 600,
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 36.0),
       child: Column(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
             children: [
-              Expanded(
-                  child: Column(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _setTitleFilterField(title: "Select Breed"),
-                  _dropDownBreeds(),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _setTitleFilterField(title: "Select Breed"),
+                      _dropDownBreeds(),
+                    ],
+                  )),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _setTitleFilterField(title: "Select SubBreed"),
+                        _dropDownSubBreeds(),
+                      ],
+                    ),
+                  ),
                 ],
-              )),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _setTitleFilterField(title: "Select SubBreed"),
-                    _dropDownSubBreeds(),
-                  ],
-                ),
+              ),
+              const SizedBox(
+                height: 50.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: _actionsButtons(),
               ),
             ],
-          ),
-          const SizedBox(
-            height: 50.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: _actionsButtons(),
           ),
         ],
       ),
@@ -84,17 +102,13 @@ class _SearchBreedsState extends State<SearchBreeds> {
         style: const TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w600,
+          color: ColorsReferences.textColor,
         ),
       );
 
-  Widget _dropDownBreeds() => DropdownButton(
+  Widget _dropDownBreeds() => Dropdown(
+        hintText: "SELECT BREED",
         value: dropdownBreedValue,
-        menuMaxHeight: maxDropdownHeight,
-        hint: const Text(
-          "SELECT BREED",
-          style: TextStyle(color: Colors.grey),
-        ),
-        style: const TextStyle(fontSize: 12.0, color: Colors.black),
         items: widget.breedsList
             .map<DropdownMenuItem<String>>(
               (breedList) => DropdownMenuItem<String>(
@@ -103,22 +117,13 @@ class _SearchBreedsState extends State<SearchBreeds> {
               ),
             )
             .toList(),
-        onChanged: (value) {
-          setState(() {
-            if (value != dropdownBreedValue) dropdownSubBreedValue = null;
-            dropdownBreedValue = value?.toString();
-          });
-        },
+        onChanged: (value) => _onChangeBreedsDropdown(value),
       );
 
-  Widget _dropDownSubBreeds() => DropdownButton(
+  Widget _dropDownSubBreeds() => Dropdown(
+        hintText: "SELECT SUB-BREED",
+        disabledIintText: "NO SUBBREED AVAILABLE",
         value: dropdownSubBreedValue,
-        menuMaxHeight: maxDropdownHeight,
-        hint: const Text(
-          "SELECT SUB-BREED",
-          style: TextStyle(color: Colors.grey),
-        ),
-        style: const TextStyle(fontSize: 12.0, color: Colors.black),
         items: dropdownBreedValue != null
             ? widget.breedsList
                 .where((breedElem) => breedElem.breed == dropdownBreedValue)
@@ -132,11 +137,7 @@ class _SearchBreedsState extends State<SearchBreeds> {
                 )
                 .toList()
             : null,
-        onChanged: (value) {
-          setState(() {
-            dropdownSubBreedValue = value.toString();
-          });
-        },
+        onChanged: (value) => _onChangeSubBreedsDropdown(value),
       );
 
   Widget _actionsButtons() => BlocBuilder<DogsImagesBloc, DogsImagesState>(

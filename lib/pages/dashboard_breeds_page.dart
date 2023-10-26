@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dashboard_breeds/blocs/breeds_list/breeds_list_bloc.dart';
 import 'package:dashboard_breeds/blocs/dogs_images/dogs_images_bloc.dart';
-import 'package:dashboard_breeds/components/search_breeds.dart';
+import 'package:dashboard_breeds/components/custom_error.dart';
+import 'package:dashboard_breeds/components/loading.dart';
+import 'package:dashboard_breeds/components/search_breeds_bottom_sheet.dart';
 import 'package:dashboard_breeds/models/breed_model.dart';
+import 'package:dashboard_breeds/theme/colors_references.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,18 +33,18 @@ class _DashboardBreedsPageState extends State<DashboardBreedsPage> {
   Widget _bodyDashBoard() => BlocBuilder<BreedsListBloc, BreedsListState>(
         builder: (breedsListContext, breedsListState) {
           if (breedsListState is BreedsFetchErrorState) {
-            return _error(breedsListState.errorMessage ?? "Errore");
+            return CustomError(
+                errorMessage: breedsListState.errorMessage ?? "Errore");
           } else if (breedsListState is BreedsFetchedState) {
             return _fetchedBreeds(breedsList: breedsListState.breeds ?? []);
           }
-          return _loading();
+          return const Loading();
         },
       );
 
-  Widget _fetchedBreeds({required List<BreedModel> breedsList}) => Column(
+  Widget _fetchedBreeds({required List<BreedModel> breedsList}) => Stack(
         children: [
-          Expanded(
-              child: BlocConsumer<DogsImagesBloc, DogsImagesState>(
+          BlocConsumer<DogsImagesBloc, DogsImagesState>(
             builder: (dogsImageContext, dogsImageState) {
               if (dogsImageState is DogsImagesNoState) {
                 return const Padding(
@@ -50,20 +53,23 @@ class _DashboardBreedsPageState extends State<DashboardBreedsPage> {
                     child: Text(
                       "No image selected. Please use search filter for display the images",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w500),
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w500,
+                          color: ColorsReferences.textColor),
                     ),
                   ),
                 );
               } else if (dogsImageState is DogErrorImagesState) {
-                return _error(
-                    dogsImageState.errorMessage ?? "Connection Error");
+                return CustomError(
+                    errorMessage:
+                        dogsImageState.errorMessage ?? "Connection Error");
               } else if (dogsImageState is DogsRandomImageState) {
                 return _viewRandomImage(dogsImageState.dogImage.message);
               } else if (dogsImageState is DogListImagesState) {
                 return _viewListImages(dogsImageState.dogImages.message);
               }
 
-              return _loading();
+              return const Loading();
             },
             listener: (context, dogsImageState) {
               if (dogsImageState is DogListImagesState) {
@@ -77,13 +83,11 @@ class _DashboardBreedsPageState extends State<DashboardBreedsPage> {
                 });
               }
             },
-          )),
-          if (itemsNumber > 0) _indicatorPageView(),
-          const SizedBox(height: 16.0),
-          const Divider(
-            thickness: 1.0,
           ),
-          SearchBreeds(breedsList: breedsList),
+          if (itemsNumber > 0) _indicatorPageView(),
+          SearchBreedsBottomSheet(
+            breedsList: breedsList,
+          ),
         ],
       );
 
@@ -128,25 +132,14 @@ class _DashboardBreedsPageState extends State<DashboardBreedsPage> {
         ),
       );
 
-  Widget _indicatorPageView() => Text(
-        "(${currentPage + 1} of $itemsNumber)",
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.grey.shade500),
-      );
-
-  Widget _loading() => const Center(
-        child: CircularProgressIndicator(),
-      );
-
-  //TBD: non restituisco errore in questa fase ma setto le picklist con nessuna opzione disponibile
-  Widget _error(String errorMsg) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Center(
-          child: Text(
-            "Error loading: $errorMsg",
-            style: const TextStyle(
-                fontSize: 24.0, fontWeight: FontWeight.w500, color: Colors.red),
-          ),
+  Widget _indicatorPageView() => Positioned(
+        top: 10,
+        right: 10,
+        child: Text(
+          "${currentPage + 1}/$itemsNumber",
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              color: ColorsReferences.textColor, fontSize: 24.0),
         ),
       );
 }

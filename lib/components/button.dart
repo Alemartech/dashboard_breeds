@@ -1,3 +1,4 @@
+import 'package:dashboard_breeds/theme/colors_references.dart';
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
@@ -19,8 +20,8 @@ class Button extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          //  backgroundColor: Config.primaryColor,
-          foregroundColor: Colors.white,
+          disabledBackgroundColor: ColorsReferences.buttonColor.withAlpha(70),
+          disabledForegroundColor: ColorsReferences.textColor.withAlpha(70),
         ),
         onPressed: disabled ? null : onPressed,
         child: Text(
