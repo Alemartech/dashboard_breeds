@@ -98,7 +98,7 @@ void main() {
     });
   });
 
-  group("testing method breedImagesList", () async {
+  group("testing method breedImagesList", () {
     test("get list breed images", () async {
       const breed = "mastiff";
 
@@ -128,7 +128,7 @@ void main() {
     });
   });
 
-  group("testing method breedImagesList", () async {
+  group("testing method breedImagesList", () {
     test("get list breed images", () async {
       const breed = "hound";
       const subBreed = "afghan";
