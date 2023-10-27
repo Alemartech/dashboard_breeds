@@ -8,9 +8,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class BreedsApiService {
+  http.Client client = http.Client();
+
   Future<List<BreedModel>> getBreedList() async {
     final baseUrl = dotenv.env['BREEDS_LIST_BASE_URL'].toString();
-    final response = await http.get(Uri.parse(baseUrl));
+    final response = await client.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
@@ -22,7 +24,7 @@ class BreedsApiService {
 
         return breeds;
       } else {
-        throw NetworkError(jsonBody["status"], jsonBody["message"]);
+        throw NetworkError(500, jsonBody["message"]);
       }
     } else {
       throw NetworkError(response.statusCode, response.reasonPhrase);
@@ -31,7 +33,8 @@ class BreedsApiService {
 
   Future<DogImageModel> getRandomBreedImage(String breed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
-    final response = await http.get(Uri.parse("$baseUrl/$breed/images/random"));
+    final response =
+        await client.get(Uri.parse("$baseUrl/$breed/images/random"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
@@ -44,7 +47,7 @@ class BreedsApiService {
 
   Future<DogImagesModel> getBreedImagesList(String breed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
-    final response = await http.get(Uri.parse("$baseUrl/$breed/images"));
+    final response = await client.get(Uri.parse("$baseUrl/$breed/images"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
@@ -59,7 +62,7 @@ class BreedsApiService {
       String breed, String subBreed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response =
-        await http.get(Uri.parse("$baseUrl/$breed/$subBreed/images/random"));
+        await client.get(Uri.parse("$baseUrl/$breed/$subBreed/images/random"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
@@ -74,7 +77,7 @@ class BreedsApiService {
       String breed, String subBreed) async {
     final baseUrl = dotenv.env['BREEDS_API_BASE_URL'].toString();
     final response =
-        await http.get(Uri.parse("$baseUrl/$breed/$subBreed/images"));
+        await client.get(Uri.parse("$baseUrl/$breed/$subBreed/images"));
 
     if (response.statusCode == 200) {
       final jsonBody = jsonDecode(response.body);
