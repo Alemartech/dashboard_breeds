@@ -1,11 +1,14 @@
 # dashboard_breeds
 
-Flutter version: 3.13.7
-Used fvm version management.
+- Flutter version: 3.13.7
+- Used fvm version management.
+- Used flutter_bloc for state management 
+
+### Colors Palette
+
+![palette](/assets/images/palette.png)
 
 For run the app:
-
-![test](/assets/images/palette.png)
 
 ## Getting Started
 
