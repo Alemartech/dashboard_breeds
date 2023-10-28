@@ -8,9 +8,14 @@
 
 ![palette](/assets/images/palette.png)
 
-For run the app:
+### Screenshot App
+
+![screenshot_1](/assets/images/Screenshot_1.png) ![screenshot_2](/assets/images/Screenshot_2.png) 
+
 
 ## Getting Started
+For run the app:
+
 
 This project is a starting point for a Flutter application.
 
