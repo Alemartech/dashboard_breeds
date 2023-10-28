@@ -23,7 +23,7 @@ class BreedsListBloc extends Bloc<BreedsListEvent, BreedsListState> {
       emit(BreedsFetchedState(breeds: breeds));
     } on RepositoryError catch (e) {
       emit(BreedsFetchErrorState(errorMessage: e.errorMessage));
-    } catch (e) {
+    } catch (error) {
       emit(const BreedsFetchErrorState());
     }
   }
