@@ -128,8 +128,8 @@ void main() {
     });
   });
 
-  group("testing method breedImagesList", () {
-    test("get list breed images", () async {
+  group("testing method subBreedImagesList", () {
+    test("get list sub-breed images", () async {
       const breed = "hound";
       const subBreed = "afghan";
 
@@ -152,7 +152,7 @@ void main() {
       expect(urlImage.message.length, 4);
     });
 
-    test("get error repository breedImagesList", () async {
+    test("get error repository subBreedImagesList", () async {
       const breed = "hound";
       const subBreed = "abcdef";
 

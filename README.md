@@ -1,6 +1,11 @@
 # dashboard_breeds
 
-A new Flutter project.
+Flutter version: 3.13.7
+Used fvm version management.
+
+For run the app:
+
+![test](/assets/images/palette.png)
 
 ## Getting Started
 
